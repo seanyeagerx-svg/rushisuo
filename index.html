@@ -9,10 +9,15 @@
 
   :root {
     --bg: #0a0a0c;
+    --cocoa: #4d2622;
+    --cocoa-dark: #2a1512;
+    --cream: #f2ecd1;
+    --cream-dark: #e8dcc0;
+    --paper: #faf7ed;
     --text: #d4cfc4;
     --text-dim: rgba(212, 207, 196, 0.45);
     --gold: #c9a96e;
-    --card-bg: #141410;
+    --shadow: rgba(0,0,0,0.4);
   }
 
   body {
@@ -21,24 +26,14 @@
     font-family: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', serif;
     line-height: 1.8;
     overflow-x: hidden;
-  }
-
-  /* ===== HERO — 保留原开场 ===== */
-  .hero {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    position: relative;
   }
 
+  /* ===== HERO ===== */
   .hero-bg {
     position: fixed;
     inset: 0;
     background: radial-gradient(ellipse at center 45%, rgba(15, 12, 8, 0) 30%, #060608 100%);
-    animation: bgLight 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0s forwards;
     z-index: 0;
   }
 
@@ -49,11 +44,20 @@
     transform: translateX(-50%);
     width: 55vw;
     height: 35vh;
-    background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.05) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.06) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
-    opacity: 0;
-    animation: breathe 8s ease-in-out 3s infinite, fadeInSlow 2s ease-out 3s forwards;
+    animation: breathe 8s ease-in-out infinite;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
   }
 
   .hero-content {
@@ -62,164 +66,137 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.2rem;
+    opacity: 0;
+    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
   }
 
   .hero-line-1 {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-size: clamp(1.4rem, 4vw, 2rem);
     letter-spacing: 0.06em;
-    opacity: 0;
-    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s forwards;
   }
 
   .hero-line-2 {
-    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-size: clamp(1.6rem, 4.5vw, 2.4rem);
     font-weight: 300;
     letter-spacing: 0.12em;
-    margin-top: 0.3rem;
-    opacity: 0;
-    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 1.8s forwards;
   }
 
   .hero-line-3 {
-    margin-top: 0.5rem;
-    opacity: 0;
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
-    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 3s forwards;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    opacity: 0.8;
   }
 
-  .hero-highlight {
-    color: var(--gold);
-    font-weight: 500;
-  }
+  .hero-highlight { color: var(--gold); }
 
-  .hero-title-reveal {
-    margin-top: 2rem;
-    font-size: 1rem;
+  .hero-title {
+    margin-top: 1.2rem;
+    font-size: 0.85rem;
     letter-spacing: 0.5em;
-    color: rgba(212, 207, 196, 0.55);
-    opacity: 0;
-    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 3.8s forwards;
+    color: var(--text-dim);
   }
 
-  .hero-title-reveal::before {
+  .hero-title::before {
     content: '';
     display: block;
-    width: 30px;
+    width: 24px;
     height: 1px;
-    background: rgba(201, 169, 110, 0.4);
-    margin: 0 auto 1rem auto;
-  }
-
-  .hero-mark {
-    font-size: 0.75rem;
-    letter-spacing: 0.45em;
-    color: rgba(212, 207, 196, 0.28);
-    opacity: 0;
-    margin-top: 0.3rem;
-    animation: appear 1s cubic-bezier(0.22, 0.61, 0.36, 1) 4.2s forwards;
+    background: rgba(201, 169, 110, 0.35);
+    margin: 0 auto 0.8rem auto;
   }
 
   .hero-scroll {
     position: absolute;
-    bottom: 2.5rem;
-    font-size: 0.7rem;
+    bottom: 2rem;
+    font-size: 0.65rem;
     letter-spacing: 0.3em;
-    color: rgba(212, 207, 196, 0.2);
+    color: rgba(212, 207, 196, 0.18);
     opacity: 0;
-    animation: appear 2s ease-out 5.5s forwards;
+    animation: appear 1.5s ease-out 1.5s forwards;
   }
 
-  /* ===== 3D 书本入口 ===== */
-  .book-entry {
+  /* ===== 书本入口 ===== */
+  .book-entry-wrap {
     position: relative;
     z-index: 2;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     opacity: 0;
-    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 6s forwards;
+    animation: appear 1.2s ease-out 2s forwards;
     cursor: pointer;
   }
 
-  .book-hint {
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    color: rgba(201, 169, 110, 0.4);
+  .book-mini {
+    width: 64px;
+    height: 88px;
+    perspective: 600px;
   }
 
-  /* 3D 书本封面 */
-  .book-cover {
-    width: 80px;
-    height: 110px;
-    perspective: 800px;
-    position: relative;
-  }
-
-  .book-3d {
+  .book-mini-3d {
     width: 100%;
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    transform: rotateY(-15deg);
-    transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transform: rotateY(-12deg);
+    transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
-  .book-entry:hover .book-3d {
-    transform: rotateY(-5deg);
+  .book-entry-wrap:hover .book-mini-3d {
+    transform: rotateY(-4deg);
   }
 
-  .book-3d .front {
+  .book-mini-front {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #1a1812 0%, #0d0c09 100%);
-    border: 1px solid rgba(201, 169, 110, 0.2);
-    border-radius: 3px 8px 8px 3px;
+    background: linear-gradient(135deg, #3a1c18, #4d2622);
+    border: 1px solid rgba(201, 169, 110, 0.25);
+    border-radius: 2px 6px 6px 2px;
+    writing-mode: vertical-rl;
     display: flex;
     align-items: center;
     justify-content: center;
-    writing-mode: vertical-rl;
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     letter-spacing: 0.35em;
     color: var(--gold);
-    box-shadow: 2px 4px 16px rgba(0,0,0,0.5);
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.5);
   }
 
-  .book-3d .spine {
+  .book-mini-spine {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 6px;
-    height: 100%;
-    background: rgba(201, 169, 110, 0.35);
-    border-radius: 3px 0 0 3px;
-    transform-origin: left center;
+    top: 0; left: 0;
+    width: 5px; height: 100%;
+    background: rgba(201, 169, 110, 0.3);
+    border-radius: 2px 0 0 2px;
   }
 
-  .book-3d .pages {
+  .book-mini-pages {
     position: absolute;
-    top: 2px;
-    right: 2px;
-    bottom: 2px;
+    top: 1px; right: 1px; bottom: 1px;
     width: 3px;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(212, 207, 196, 0.15) 0px,
-      rgba(212, 207, 196, 0.15) 1px,
+    background: repeating-linear-gradient(to bottom,
+      rgba(212,207,196,0.12) 0px,
+      rgba(212,207,196,0.12) 1px,
       transparent 1px,
       transparent 2px
     );
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 4px 4px 0;
   }
 
-  /* ===== 书本全屏打开 ===== */
+  .book-hint {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: rgba(201, 169, 110, 0.4);
+  }
+
+  /* ===== 全屏翻书 ===== */
   .book-overlay {
     position: fixed;
     inset: 0;
     z-index: 100;
-    background: rgba(5, 5, 7, 0.97);
+    background: rgba(5, 5, 7, 0.96);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -228,7 +205,9 @@
     opacity: 0;
     transition: opacity 0.5s ease, visibility 0s 0.5s;
     overflow-y: auto;
-    padding: 3rem 2rem;
+    padding: 2rem;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .book-overlay.open {
@@ -239,15 +218,14 @@
 
   .book-close {
     position: fixed;
-    top: 1.5rem;
-    right: 1.5rem;
+    top: 1rem;
+    right: 1rem;
     z-index: 110;
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(201, 169, 110, 0.25);
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201, 169, 110, 0.2);
     background: transparent;
     color: var(--gold);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     cursor: pointer;
     border-radius: 50%;
     display: flex;
@@ -266,99 +244,234 @@
 
   .book-close:hover {
     background: rgba(201, 169, 110, 0.1);
-    border-color: rgba(201, 169, 110, 0.4);
   }
 
-  .book-spread {
-    max-width: 800px;
+  /* ===== 翻书容器 ===== */
+  .scene {
+    perspective: 1400px;
+    perspective-origin: center center;
     width: 100%;
+    max-width: 720px;
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+    align-items: center;
   }
 
-  .book-header {
-    text-align: center;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+  .book {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    max-height: 78vh;
+    transform-style: preserve-3d;
   }
 
-  .book-header-title {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-    letter-spacing: 0.3em;
-    color: var(--gold);
+  .page {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+    cursor: pointer;
   }
 
-  .book-header-sub {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    color: var(--text-dim);
-    margin-top: 0.5rem;
+  .page.flipped {
+    transform: rotateY(-180deg);
+    pointer-events: none;
   }
 
-  .book-paragraph {
+  .front, .back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     display: flex;
-    gap: 1.5rem;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid rgba(201, 169, 110, 0.06);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px 8px 8px 2px;
+    overflow: hidden;
   }
 
-  .book-paragraph.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .back { transform: rotateY(180deg); }
+
+  /* 封面 */
+  .cover-front {
+    background: linear-gradient(135deg, #2a1512 0%, #4d2622 45%, #5c3028 100%);
+    border: 1px solid #6b3a30;
+    box-shadow: 3px 3px 12px var(--shadow), 1px 1px 2px rgba(0,0,0,0.2) inset;
+    color: var(--cream);
+    text-align: center;
+    padding: 8%;
   }
 
-  .book-paragraph .num {
-    font-family: 'Noto Sans SC', sans-serif;
-    font-size: 0.75rem;
+  .cover-front::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(201, 169, 110, 0.25);
+    border-radius: 2px 6px 6px 2px;
+  }
+
+  .cover-line { width: 32px; height: 1px; background: var(--gold); opacity: 0.5; margin: 8px auto; }
+
+  .cover-title {
+    font-size: clamp(22px, 4.5vw, 40px);
+    letter-spacing: 0.35em;
     color: var(--gold);
-    min-width: 2rem;
-    padding-top: 0.15rem;
+    -webkit-text-stroke: 0.5px rgba(201, 169, 110, 0.3);
+    margin-bottom: 12px;
+    z-index: 1;
+    position: relative;
+  }
+
+  .cover-sub {
+    font-size: clamp(11px, 2vw, 16px);
+    color: var(--cream);
     opacity: 0.6;
-  }
-
-  .book-paragraph .text {
-    flex: 1;
-    font-size: 0.95rem;
-    line-height: 2.1;
-    letter-spacing: 0.04em;
-  }
-
-  .book-paragraph .text .g {
-    color: var(--gold);
-    font-weight: 500;
-  }
-
-  .book-paragraph .src {
-    font-size: 0.65rem;
     letter-spacing: 0.15em;
-    color: var(--text-dim);
-    margin-top: 0.5rem;
+    z-index: 1;
+    position: relative;
+  }
+
+  .cover-hint {
+    position: absolute;
+    bottom: 10%;
+    font-size: 11px;
+    color: rgba(242, 236, 209, 0.35);
+    letter-spacing: 0.12em;
+  }
+
+  .cover-back {
+    background: var(--paper);
+    color: var(--cocoa);
+    padding: 8%;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* 内页 */
+  .page-front, .page-back {
+    background: var(--paper);
+    color: #2c1810;
+    padding: 7% 9%;
+    justify-content: flex-start;
+    text-align: left;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    border-left: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .page-back { background: linear-gradient(to right, var(--paper) 0%, #f5f0e0 100%); }
+
+  .page-pill {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--cocoa);
+    padding: 2px 10px;
+    border-radius: 16px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .page-num {
+    position: absolute;
+    bottom: 6%;
+    right: 8%;
+    font-size: 11px;
+    color: #b8a88a;
+  }
+
+  .page-h2 {
+    font-size: clamp(16px, 3vw, 22px);
+    color: var(--cocoa);
+    margin-bottom: 14px;
+    letter-spacing: 0.08em;
+  }
+
+  .page-h3 {
+    font-size: clamp(13px, 2.5vw, 17px);
+    color: #6b4a3a;
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+
+  .page-p {
+    font-size: clamp(12px, 2.2vw, 15px);
+    line-height: 2;
+    color: #3a2418;
+    margin-bottom: 8px;
+  }
+
+  .page-emp { color: var(--cocoa-dark); font-weight: 700; }
+
+  .page-note {
+    color: #8a7060;
+    font-size: 12px;
+    line-height: 1.8;
+    margin-top: 8px;
+    padding: 8px;
+    background: rgba(201, 169, 110, 0.08);
+    border-radius: 4px;
+  }
+
+  /* 折角 */
+  .fold-corner {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 32px; height: 32px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 2;
+  }
+
+  .fold-corner svg { width: 100%; height: 100%; }
+
+  .page:hover .fold-corner { width: 40px; height: 40px; }
+
+  /* 控制栏 */
+  .controls {
+    display: flex; align-items: center; gap: 16px; margin-top: 16px; padding-bottom: 1rem;
+  }
+
+  .btn {
+    background: transparent;
+    border: 1px solid rgba(201, 169, 110, 0.4);
+    color: var(--cream);
+    padding: 6px 16px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.3s;
+  }
+
+  .btn:hover { background: rgba(201, 169, 110, 0.1); }
+  .btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+  .page-indicator {
+    color: var(--cream);
+    font-size: 12px;
+    opacity: 0.5;
+    min-width: 50px;
+    text-align: center;
   }
 
   @keyframes appear {
-    from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
-    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
-  }
-
-  @keyframes bgLight {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes breathe {
-    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
-    50%      { opacity: 1; transform: translateX(-50%) scale(1.08); }
+    0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.06); }
   }
 
-  @keyframes fadeInSlow {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  @media (max-width: 600px) {
+    .book { max-height: 65vh; aspect-ratio: 3 / 4.5; }
+    .page-front, .page-back { padding: 5% 7%; }
+    .controls { gap: 10px; margin-top: 10px; }
   }
 </style>
 </head>
@@ -367,99 +480,263 @@
 <div class="hero-bg"></div>
 <div class="hero-ambient"></div>
 
-<!-- HERO — 原开场 -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-content">
     <div class="hero-line-1">世界比你以为的简单。</div>
     <div class="hero-line-2">复杂的，</div>
     <div class="hero-line-3">是你脑子里那些<span class="hero-highlight">被过度演绎</span>的东西。</div>
-    <div class="hero-title-reveal">如实所现</div>
-    <div class="hero-mark">— 前言 —</div>
+    <div class="hero-title">如实所现</div>
 
-    <!-- 3D 书本入口 -->
-    <div class="book-entry" id="bookEntry">
-      <div class="book-cover">
-        <div class="book-3d">
-          <div class="spine"></div>
-          <div class="front">如实所现</div>
-          <div class="pages"></div>
+    <div class="book-entry-wrap" id="bookEntry">
+      <div class="book-mini">
+        <div class="book-mini-3d">
+          <div class="book-mini-spine"></div>
+          <div class="book-mini-front">如实所现</div>
+          <div class="book-mini-pages"></div>
         </div>
       </div>
       <span class="book-hint">翻开阅读</span>
     </div>
   </div>
-  <div class="hero-scroll">↓ 下滑继续</div>
+  <div class="hero-scroll">↓</div>
 </section>
 
-<!-- 全屏书 -->
+<!-- 全屏翻书 -->
 <div class="book-overlay" id="bookOverlay">
-  <div class="book-spread" id="bookSpread"></div>
+  <div class="scene">
+    <div class="book" id="book">
+
+      <!-- 封面 -->
+      <div class="page" data-idx="0" style="z-index:13">
+        <div class="front cover-front">
+          <div class="cover-line"></div>
+          <div class="cover-title">如实所现</div>
+          <div class="cover-line"></div>
+          <div class="cover-sub">所见即所得 · 所现即所是</div>
+          <div class="fold-corner">
+            <svg viewBox="0 0 40 40"><path d="M0 40 L0 8 Q0 0 8 0 L40 0" fill="#f2ecd1" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/><path d="M0 40 L0 8 Q0 0 8 0" fill="rgba(0,0,0,0.04)"/></svg>
+          </div>
+          <div class="cover-hint">← 点击右半侧翻开</div>
+        </div>
+        <div class="back cover-back">
+          <div class="page-h2">如实所现</div>
+          <div class="page-p">世界很简单。</div>
+          <div class="page-p">复杂的，</div>
+          <div class="page-p">是你脑子里那些<span class="page-emp">被过度演绎</span>的声音。</div>
+          <div class="page-num">0</div>
+        </div>
+      </div>
+
+      <!-- 页1: 你脑子里那个声音不是你 -->
+      <div class="page" data-idx="1" style="z-index:12">
+        <div class="front page-front">
+          <span class="page-pill">第一章</span>
+          <div class="page-h2">你脑子里那个声音不是你</div>
+          <div class="page-p">在念头出现的瞬间，识别这是一个<span class="page-emp">念头而不是事实</span>，那个念头就失去了力量。</div>
+          <div class="page-p">它变成了一团飘过的云。你不需要爬上去，也不需要追着它跑。</div>
+          <div class="page-note">你的大脑非常听话，听话到危险的程度。问题在于，你听话的对象错了。</div>
+          <div class="page-num">1</div>
+        </div>
+        <div class="back page-back">
+          <div class="page-h3">关键练习</div>
+          <div class="page-p">每当焦虑或恐惧袭来，先问自己：</div>
+          <div class="page-note">「这件事的实际影响有多大？用数字和时间说，不用形容词说。」</div>
+          <div class="page-num">2</div>
+        </div>
+      </div>
+
+      <!-- 页2: 叙事 -->
+      <div class="page" data-idx="2" style="z-index:11">
+        <div class="front page-front">
+          <span class="page-pill">第二章</span>
+          <div class="page-h2">叙事是精神鸦片</div>
+          <div class="page-p">叙事让你瘫痪在巨大的「应该」和「不能」之间。</div>
+          <div class="page-p">结构让你回到<span class="page-emp">具体的下一步。</span></div>
+          <div class="page-note">你的大脑每天承受的刺激，远远超过被设计来承受的水平。你的情绪和真实生活之间的联系断了。</div>
+          <div class="page-num">3</div>
+        </div>
+        <div class="back page-back">
+          <div class="page-h3">结构化拆解</div>
+          <div class="page-p">❶ 定义问题（带数字带时间）</div>
+          <div class="page-p">❷ 列出条件</div>
+          <div class="page-p">❸ 评估瓶颈</div>
+          <div class="page-p">❹ 拆解到最小动作</div>
+          <div class="page-p">❺ 立刻做</div>
+          <div class="page-num">4</div>
+        </div>
+      </div>
+
+      <!-- 页3: 注意力 -->
+      <div class="page" data-idx="3" style="z-index:10">
+        <div class="front page-front">
+          <span class="page-pill">第三章</span>
+          <div class="page-h2">悄悄塑造你的力量</div>
+          <div class="page-p">注意力是你这一生<span class="page-emp">最重要的资源</span>。</div>
+          <div class="page-p">掌控它，就掌控了情绪、产出、方向、人生。</div>
+          <div class="page-note">注意力在哪，情绪就在哪。集中在同一方向才有复利。</div>
+          <div class="page-num">5</div>
+        </div>
+        <div class="back page-back">
+          <div class="page-h3">内在记分牌</div>
+          <div class="page-p">外部数据有噪音。</div>
+          <div class="page-p">内在成长是真指标。</div>
+          <div class="page-note">不要用别人的尺子量自己的路。你自己的记分牌，只属于你。</div>
+          <div class="page-num">6</div>
+        </div>
+      </div>
+
+      <!-- 页4: 语言 -->
+      <div class="page" data-idx="4" style="z-index:9">
+        <div class="front page-front">
+          <span class="page-pill">第四章</span>
+          <div class="page-h2">语言是你最重要的技术</div>
+          <div class="page-p">人通过反复说同一种话，<span class="page-emp">活成了那种话所描述的样子。</span></div>
+          <div class="page-p">用结构化语言代替模糊叙事。</div>
+          <div class="page-p">你说什么，你就成为什么。</div>
+          <div class="page-num">7</div>
+        </div>
+        <div class="back page-back">
+          <div class="page-h3">结构化这个世界</div>
+          <div class="page-p">把所有问题拆解到最小单元，<span class="page-emp">每一个最小单元都不难。</span></div>
+          <div class="page-note">困难从来不在最小单元里，困难在无力感里。拆开它，它就变小了。</div>
+          <div class="page-num">8</div>
+        </div>
+      </div>
+
+      <!-- 页5: 身体 -->
+      <div class="page" data-idx="5" style="z-index:8">
+        <div class="front page-front">
+          <span class="page-pill">第五章</span>
+          <div class="page-h2">身体是核心生产力</div>
+          <div class="page-p">意志力的上限很大程度上取决于<span class="page-emp">生理状态</span>。</div>
+          <div class="page-p">天花板不在心理，在身体。</div>
+          <div class="page-num">9</div>
+        </div>
+        <div class="back page-back">
+          <div class="page-h3">做事的逻辑</div>
+          <div class="page-p">一个完成了的 60 分，</div>
+          <div class="page-p">永远比一个停留在想法阶段的 100 分</div>
+          <div class="page-p"><span class="page-emp">更有价值。</span></div>
+          <div class="page-num">10</div>
+        </div>
+      </div>
+
+      <!-- 页6: 表达 + 后记 -->
+      <div class="page" data-idx="6" style="z-index:7">
+        <div class="front page-front">
+          <span class="page-pill">第六章</span>
+          <div class="page-h2">表达是影响世界的唯一接口</div>
+          <div class="page-p">把认知资产变成<span class="page-emp">一艘船</span>——</div>
+          <div class="page-p">帮助别人更快地到达你已经到过的地方。</div>
+          <div class="page-num">11</div>
+        </div>
+        <div class="back page-back">
+          <div class="page-h3">后记</div>
+          <div class="page-p">世界很简单。</div>
+          <div class="page-p">复杂的是你脑子里那些被过度演绎的声音。</div>
+          <div class="page-note">但现在你知道了——那些声音不是你。你比它们大得多。</div>
+          <div class="page-num">12</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="btnPrev" disabled>← 上一页</button>
+      <span class="page-indicator" id="pageIndicator">封面</span>
+      <button class="btn" id="btnNext">下一页 →</button>
+    </div>
+  </div>
 </div>
 
 <button class="book-close" id="bookClose">✕</button>
 
 <script>
 (function() {
-  var passages = [
-    { text: '在念头出现的瞬间，识别这是一个念头而不是事实，那个念头就失去了力量。它变成了一团<span class="g">飘过的云</span>，你不需要爬上去，也不需要追着它跑。', src: '第一章 — 你脑子里那个声音不是你' },
-    { text: '你的大脑非常听话，听话到危险的程度。问题在于，<span class="g">你听话的对象错了。</span>', src: '第一章' },
-    { text: '叙事让你瘫痪在巨大的"应该"和"不能"之间。结构让你回到<span class="g">具体的下一步。</span>', src: '第二章 — 叙事是这个时代最大的精神鸦片' },
-    { text: '你的大脑每天承受的刺激，远远超过它在进化过程中被设计来承受的水平。你的情绪和真实生活之间的联系<span class="g">断了。</span>', src: '第三章 — 那些悄悄塑造你的力量' },
-    { text: '注意力是你这一生最重要的资源。学会掌控它，你就掌控了你的情绪、你的产出、你的方向、<span class="g">你的人生。</span>', src: '第四章 — 注意力是你唯一真正的货币' },
-    { text: '人通过反复说同一种话，<span class="g">活成了那种话所描述的样子。</span>', src: '第五章 — 语言是你最重要的技术' },
-    { text: '当你把所有问题拆解到最小单元，<span class="g">每一个最小单元都不难。</span>困难从来不在最小单元里，困难在无力感里。', src: '第六章 — 结构化这个世界' },
-    { text: '意志力的上限很大程度上取决于你的生理状态。天花板不在你的心理，<span class="g">在你的身体。</span>', src: '第七章 — 你的身体是你的核心生产力' },
-    { text: '一个完成了的60分，永远比一个永远停留在想法阶段的<span class="g">100分更有价值。</span>', src: '第八章 — 做事的逻辑' },
-    { text: '表达的意义，是把你的认知资产变成<span class="g">一艘船</span>——帮助别人更快地到达你已经到过的地方。', src: '第九章 — 表达是你影响世界的唯一接口' },
-    { text: '世界很简单。复杂的是你脑子里那些被过度演绎的声音。但现在你知道了——<span class="g">那些声音不是你。你比它们大得多。</span>', src: '后记' }
-  ];
-
   var overlay = document.getElementById('bookOverlay');
   var closeBtn = document.getElementById('bookClose');
-  var spread = document.getElementById('bookSpread');
-  var body = document.body;
+  var book = document.getElementById('book');
+  var btnPrev = document.getElementById('btnPrev');
+  var btnNext = document.getElementById('btnNext');
+  var indicator = document.getElementById('pageIndicator');
+  var pages = book.querySelectorAll('.page');
+  var totalPages = pages.length;
+  var currentPage = 0;
 
-  function buildSpread() {
-    var h = '<div class="book-header"><div class="book-header-title">如实所现</div><div class="book-header-sub">精选段落</div></div>';
-    passages.forEach(function(p, i) {
-      h += '<div class="book-paragraph" data-idx="' + i + '">' +
-        '<div class="num">' + String(i + 1).padStart(2, '0') + '</div>' +
-        '<div><div class="text">' + p.text + '</div><div class="src">' + p.src + '</div></div>' +
-        '</div>';
-    });
-    spread.innerHTML = h;
+  var pageNames = ['封面','第一章','第二章','第三章','第四章','第五章','第六章'];
+
+  function updateControls() {
+    btnPrev.disabled = currentPage === 0;
+    btnNext.disabled = currentPage >= totalPages;
+    indicator.textContent = currentPage === 0 ? '封面' : pageNames[currentPage] + ' (' + currentPage + '/' + totalPages + ')';
   }
 
-  buildSpread();
+  function closeAll() {
+    pages.forEach(function(p) { p.classList.remove('flipped'); });
+  }
+
+  function nextPage() {
+    if (currentPage < totalPages) {
+      pages[currentPage].classList.add('flipped');
+      currentPage++;
+    }
+    updateControls();
+  }
+
+  function prevPage() {
+    if (currentPage > 0) {
+      currentPage--;
+      pages[currentPage].classList.remove('flipped');
+    }
+    updateControls();
+  }
+
+  book.addEventListener('click', function(e) {
+    if (currentPage >= totalPages) return;
+    var rect = book.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    if (x < rect.width / 2) prevPage();
+    else nextPage();
+  });
+
+  btnPrev.addEventListener('click', function(e) { e.stopPropagation(); prevPage(); });
+  btnNext.addEventListener('click', function(e) { e.stopPropagation(); nextPage(); });
+
+  document.addEventListener('keydown', function(e) {
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); nextPage(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevPage(); }
+    if (e.key === 'Escape') closeBook();
+  });
+
+  // Touch swipe
+  var touchX = 0;
+  book.addEventListener('touchstart', function(e) { touchX = e.touches[0].clientX; });
+  book.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) { if (dx < 0) nextPage(); else prevPage(); }
+  });
 
   function openBook() {
     overlay.classList.add('open');
     closeBtn.classList.add('visible');
-    body.style.overflow = 'hidden';
-    // Trigger paragraph animations with delay
-    setTimeout(function() {
-      var paras = overlay.querySelectorAll('.book-paragraph');
-      paras.forEach(function(p, i) {
-        setTimeout(function() { p.classList.add('visible'); }, i * 80);
-      });
-    }, 300);
+    document.body.style.overflow = 'hidden';
   }
 
   function closeBook() {
     overlay.classList.remove('open');
     closeBtn.classList.remove('visible');
-    body.style.overflow = '';
-    var paras = overlay.querySelectorAll('.book-paragraph');
-    paras.forEach(function(p) { p.classList.remove('visible'); });
+    document.body.style.overflow = '';
+    closeAll();
+    currentPage = 0;
+    updateControls();
   }
 
   document.getElementById('bookEntry').addEventListener('click', openBook);
   closeBtn.addEventListener('click', closeBook);
 
-  // ESC 关闭
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && overlay.classList.contains('open')) closeBook();
-  });
+  updateControls();
 })();
 </script>
 
