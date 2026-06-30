@@ -13,8 +13,6 @@
     --text-dim: rgba(212, 207, 196, 0.45);
     --gold: #c9a96e;
     --gold-dim: rgba(201, 169, 110, 0.25);
-    --cocoa: #3a1c18;
-    --paper: #faf7ed;
   }
 
   body {
@@ -25,10 +23,21 @@
     overflow-x: hidden;
   }
 
-  /* ===== 环境层 ===== */
+  /* ===== 进度条 ===== */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--gold);
+    z-index: 1000;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* ===== 环境 ===== */
   .ambient-bg {
     position: fixed; inset: 0;
-    background: radial-gradient(ellipse at center 45%, rgba(15, 12, 8, 0) 30%, #060608 100%);
+    background: radial-gradient(ellipse at center 45%, rgba(15,12,8,0) 30%, #060608 100%);
     animation: bgFadeIn 2.4s cubic-bezier(0.22,0.61,0.36,1) 0s forwards;
     z-index: 0;
   }
@@ -59,33 +68,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.9rem;
+    gap: 1rem;
+  }
+
+  .hero-l1, .hero-l2, .hero-l3, .hero-title-wrap, .hero-author {
     opacity: 0;
-    animation: appear 1.2s cubic-bezier(0.22,0.61,0.36,1) 0.3s forwards;
   }
 
   .hero-l1 {
     font-size: clamp(1.4rem, 4vw, 2rem);
     letter-spacing: 0.06em;
   }
+
   .hero-l2 {
     font-size: clamp(1.6rem, 4.5vw, 2.4rem);
     font-weight: 300;
     letter-spacing: 0.12em;
   }
+
   .hero-l3 {
     font-size: clamp(1.2rem, 3vw, 1.6rem);
-    opacity: 0.8;
   }
+
   .hero-hl { color: var(--gold); }
 
-  .hero-title {
+  .hero-title-wrap {
     margin-top: 1.5rem;
     font-size: 0.85rem;
     letter-spacing: 0.5em;
     color: var(--text-dim);
   }
-  .hero-title::before {
+
+  .hero-title-wrap::before {
     content: ''; display: block;
     width: 24px; height: 1px;
     background: rgba(201,169,110,0.35);
@@ -99,16 +113,8 @@
     margin-top: 0.1rem;
   }
 
-  .hero-scroll {
-    position: absolute;
-    bottom: 2rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    color: rgba(212,207,196,0.18);
-  }
-
-  /* ===== 章节区 ===== */
-  .chapters {
+  /* ===== 章节容器 ===== */
+  .chapters-wrap {
     position: relative;
     z-index: 1;
     max-width: 680px;
@@ -117,24 +123,22 @@
   }
 
   .chapter {
-    padding: 4rem 0;
-    border-bottom: 1px solid rgba(201,169,110,0.06);
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s cubic-bezier(0.22,0.61,0.36,1), transform 0.8s cubic-bezier(0.22,0.61,0.36,1);
+    padding: 6rem 0 4rem;
   }
 
-  .chapter.visible {
-    opacity: 1;
-    transform: translateY(0);
+  /* 章节标题区 */
+  .ch-head {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
   }
 
   .ch-num {
     font-size: 0.7rem;
     letter-spacing: 0.35em;
     color: var(--gold);
-    opacity: 0.6;
-    margin-bottom: 0.8rem;
+    opacity: 0.5;
+    margin-bottom: 0.6rem;
     font-family: 'Noto Sans SC', sans-serif;
   }
 
@@ -142,115 +146,142 @@
     font-size: clamp(1.1rem, 2.5vw, 1.5rem);
     color: var(--gold);
     letter-spacing: 0.12em;
-    margin-bottom: 1.5rem;
   }
 
+  /* 碎片化引言 */
+  .ch-poem {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    line-height: 2.4;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+  }
+
+  .ch-poem .poem-line {
+    display: block;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  /* 正文段落 */
   .ch-body {
     font-size: clamp(0.9rem, 2vw, 1rem);
     line-height: 2.2;
     letter-spacing: 0.04em;
-    color: var(--text);
   }
 
-  .ch-body .emp {
-    color: var(--gold);
-    font-weight: 500;
+  .ch-body .seg {
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateY(14px);
   }
 
-  .ch-body .dim {
-    color: var(--text-dim);
-    font-size: 0.85em;
-  }
+  .ch-body .emp { color: var(--gold); font-weight: 500; }
+  .ch-body .dim { color: var(--text-dim); font-size: 0.85em; }
 
   .ch-quote {
-    margin: 1.5rem 0;
-    padding: 1rem 1.2rem;
+    margin: 1.8rem 0 2rem;
+    padding: 1.2rem 1.5rem;
     background: rgba(201,169,110,0.04);
-    border-left: 2px solid rgba(201,169,110,0.2);
+    border-left: 2px solid var(--gold-dim);
     border-radius: 0 4px 4px 0;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     color: rgba(212,207,196,0.7);
     line-height: 1.9;
+    opacity: 0;
+    transform: translateY(14px);
   }
 
   .ch-list {
     list-style: none;
     padding-left: 0.5rem;
+    margin-top: 0.5rem;
   }
+
   .ch-list li {
-    padding: 0.3rem 0;
+    padding: 0.35rem 0;
     font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+    opacity: 0;
+    transform: translateX(-10px);
   }
-  .ch-list li::before {
-    content: attr(data-n);
+
+  .ch-list li .n {
     color: var(--gold);
     margin-right: 0.6rem;
     font-size: 0.8rem;
     opacity: 0.5;
   }
 
-  /* ===== 章节分隔 ===== */
-  .section-divider {
+  /* ===== Visual breather ===== */
+  .ch-breather {
+    height: 2rem;
     text-align: center;
-    padding: 2rem 0;
     color: var(--text-dim);
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     letter-spacing: 0.4em;
-    opacity: 0.4;
+    opacity: 0;
   }
 
-  /* ===== 底部结语 ===== */
+  /* ===== 结语 ===== */
   .outro {
     text-align: center;
     padding: 6rem 1.5rem 4rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s cubic-bezier(0.22,0.61,0.36,1);
     position: relative;
     z-index: 1;
     max-width: 600px;
     margin: 0 auto;
   }
-  .outro.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
   .outro-line {
     font-size: clamp(1rem, 2vw, 1.3rem);
+    line-height: 2.4;
     color: var(--text);
     letter-spacing: 0.06em;
-    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateY(12px);
   }
-  .outro-emp {
-    color: var(--gold);
-    font-weight: 500;
-  }
+
+  .outro-emp { color: var(--gold); font-weight: 500; }
+
   .outro-sign {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
     font-size: 0.7rem;
     letter-spacing: 0.35em;
     color: var(--text-dim);
+    opacity: 0;
+    transform: translateY(12px);
   }
 
-  @keyframes appear {
-    from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
-    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  /* 微光粒子 */
+  .spark {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
   }
+
   @keyframes bgFadeIn {
     from { opacity: 0; } to { opacity: 1; }
   }
+
   @keyframes fadeInSlow {
     from { opacity: 0; } to { opacity: 1; }
   }
+
   @keyframes breathe {
     0%,100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
     50%     { opacity: 1; transform: translateX(-50%) scale(1.06); }
   }
 
   @media (max-width: 600px) {
-    .chapters { padding: 0 1rem 4rem; }
-    .chapter { padding: 3rem 0; }
-    .ch-body { line-height: 2; }
+    .chapters-wrap { padding: 0 1rem 4rem; }
+    .chapter { padding: 4rem 0 3rem; }
+    .ch-head { margin-bottom: 2rem; padding: 1rem 0; }
+    .ch-poem { margin-bottom: 2rem; line-height: 2.2; }
   }
 </style>
 </head>
@@ -258,6 +289,7 @@
 
 <div class="ambient-bg"></div>
 <div class="ambient-glow"></div>
+<div class="progress-bar" id="progressBar"></div>
 
 <!-- HERO -->
 <section class="hero">
@@ -265,115 +297,307 @@
     <div class="hero-l1">世界比你以为的简单。</div>
     <div class="hero-l2">复杂的，</div>
     <div class="hero-l3">是你脑子里那些<span class="hero-hl">被过度演绎</span>的东西。</div>
-    <div class="hero-title">《如实所现》</div>
+    <div class="hero-title-wrap">《如实所现》</div>
     <div class="hero-author">树林</div>
   </div>
-  <div class="hero-scroll">↓ 下滑阅读</div>
 </section>
 
 <!-- 章节 -->
-<section class="chapters">
+<section class="chapters-wrap">
 
-  <div class="chapter">
-    <div class="ch-num">第一章</div>
-    <div class="ch-title">你脑子里那个声音不是你</div>
+  <!-- 第一章 -->
+  <div class="chapter" id="ch1">
+    <div class="ch-head">
+      <div class="ch-num">第一章</div>
+      <div class="ch-title">你脑子里那个声音不是你</div>
+    </div>
+    <div class="ch-poem">
+      <span class="poem-line">一个念头，</span>
+      <span class="poem-line">只是一团<span class="emp">飘过的云</span>。</span>
+      <span class="poem-line">你不必爬上去，</span>
+      <span class="poem-line">也不必追。</span>
+    </div>
     <div class="ch-body">
-      在念头出现的瞬间，识别这是一个<span class="emp">念头而不是事实</span>，那个念头就失去了力量。它变成了一团飘过的云。你不需要爬上去，也不需要追着它跑。
+      <span class="seg">在念头出现的瞬间，识别这是一个<span class="emp">念头而不是事实</span>，那个念头就失去了力量。</span>
+      <span class="seg">它变成了一团飘过的云。你不需要爬上去，也不需要追着它跑。</span>
+      <span class="seg">每当焦虑或恐惧袭来，先问自己：<span class="dim">这件事的实际影响有多大？用数字和时间说，不用形容词说。</span></span>
     </div>
     <div class="ch-quote">你的大脑非常听话，听话到危险的程度。问题在于，你听话的对象错了。</div>
-    <div class="ch-body">
-      每当焦虑或恐惧袭来，先问自己：这件事的实际影响有多大？<span class="dim">用数字和时间说，不用形容词说。</span>
-    </div>
+    <div class="ch-breather">· · ·</div>
   </div>
 
-  <div class="chapter">
-    <div class="ch-num">第二章</div>
-    <div class="ch-title">叙事是精神鸦片</div>
-    <div class="ch-body">
-      叙事让你瘫痪在巨大的「应该」和「不能」之间。结构让你回到<span class="emp">具体的下一步。</span>
+  <!-- 第二章 -->
+  <div class="chapter" id="ch2">
+    <div class="ch-head">
+      <div class="ch-num">第二章</div>
+      <div class="ch-title">叙事是精神鸦片</div>
     </div>
-    <div class="ch-quote">你的大脑每天承受的刺激，远远超过它被设计来承受的水平。你的情绪和真实生活之间的联系断了。</div>
-    <div class="ch-body">
-      <ul class="ch-list">
-        <li data-n="❶">定义问题<span class="dim"> — 带数字、带时间</span></li>
-        <li data-n="❷">列出条件</li>
-        <li data-n="❸">评估瓶颈</li>
-        <li data-n="❹">拆解到最小动作</li>
-        <li data-n="❺">立刻做</li>
-      </ul>
+    <div class="ch-poem">
+      <span class="poem-line">瘫痪，</span>
+      <span class="poem-line">在「应该」和「不能」之间。</span>
+      <span class="poem-line">结构，</span>
+      <span class="poem-line">是<span class="emp">具体的下一步</span>。</span>
     </div>
-  </div>
-
-  <div class="chapter">
-    <div class="ch-num">第三章</div>
-    <div class="ch-title">悄悄塑造你的力量</div>
     <div class="ch-body">
-      注意力是你这一生<span class="emp">最重要的资源</span>。掌控它，就掌控了情绪、产出、方向、人生。
-    </div>
-    <div class="ch-quote">注意力在哪，情绪就在哪。集中在同一方向才有复利。</div>
-    <div class="ch-body">
-      <ul class="ch-list">
-        <li data-n="✦">外部数据有噪音，内在成长是真指标</li>
-        <li data-n="✦">不要用别人的尺子量自己的路</li>
-        <li data-n="✦">你自己的记分牌，只属于你</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="chapter">
-    <div class="ch-num">第四章</div>
-    <div class="ch-title">语言是你最重要的技术</div>
-    <div class="ch-body">
-      人通过反复说同一种话，<span class="emp">活成了那种话所描述的样子。</span>用结构化语言代替模糊叙事。你说什么，你就成为什么。
+      <span class="seg">叙事让你瘫痪在巨大的「应该」和「不能」之间。结构让你回到<span class="emp">具体的下一步。</span></span>
+      <span class="seg">你的大脑每天承受的刺激，远远超过它被设计来承受的水平。你的情绪和真实生活之间的联系断了。</span>
     </div>
     <div class="ch-quote">困难从来不在最小单元里，困难在无力感里。拆开它，它就变小了。</div>
-    <div class="ch-body">
-      把所有问题拆解到最小单元，<span class="emp">每一个最小单元都不难。</span>
-    </div>
+    <ul class="ch-list">
+      <li><span class="n">❶</span>定义问题 <span class="dim">— 带数字、带时间</span></li>
+      <li><span class="n">❷</span>列出条件</li>
+      <li><span class="n">❸</span>评估瓶颈</li>
+      <li><span class="n">❹</span>拆解到最小动作</li>
+      <li><span class="n">❺</span>立刻做</li>
+    </ul>
+    <div class="ch-breather">· · ·</div>
   </div>
 
-  <div class="chapter">
-    <div class="ch-num">第五章</div>
-    <div class="ch-title">身体是核心生产力</div>
-    <div class="ch-body">
-      意志力的上限很大程度上取决于<span class="emp">生理状态</span>。天花板不在心理，在身体。一个完成了的 60 分，永远比一个停留在想法阶段的 100 分<span class="emp">更有价值。</span>
+  <!-- 第三章 -->
+  <div class="chapter" id="ch3">
+    <div class="ch-head">
+      <div class="ch-num">第三章</div>
+      <div class="ch-title">悄悄塑造你的力量</div>
     </div>
+    <div class="ch-poem">
+      <span class="poem-line">注意力在哪，</span>
+      <span class="poem-line">情绪就在哪。</span>
+      <span class="poem-line">方向在哪里，</span>
+      <span class="poem-line">复利在哪里。</span>
+    </div>
+    <div class="ch-body">
+      <span class="seg">注意力是你这一生<span class="emp">最重要的资源</span>。掌控它，就掌控了情绪、产出、方向、人生。</span>
+    </div>
+    <div class="ch-quote">不要用别人的尺子量自己的路。你自己的记分牌，只属于你。</div>
+    <ul class="ch-list">
+      <li><span class="n">✦</span>外部数据有噪音，内在成长是真指标</li>
+      <li><span class="n">✦</span>集中在同一方向才有复利</li>
+      <li><span class="n">✦</span>注意力 = 货币</li>
+    </ul>
+    <div class="ch-breather">· · ·</div>
   </div>
 
-  <div class="chapter">
-    <div class="ch-num">第六章</div>
-    <div class="ch-title">表达是影响世界的唯一接口</div>
-    <div class="ch-body">
-      把认知资产变成<span class="emp">一艘船</span>——帮助别人更快地到达你已经到过的地方。
+  <!-- 第四章 -->
+  <div class="chapter" id="ch4">
+    <div class="ch-head">
+      <div class="ch-num">第四章</div>
+      <div class="ch-title">语言是你最重要的技术</div>
     </div>
+    <div class="ch-poem">
+      <span class="poem-line">反复说着同一种话，</span>
+      <span class="poem-line">活成了</span>
+      <span class="poem-line">那种话<span class="emp">所描述的样子</span>。</span>
+    </div>
+    <div class="ch-body">
+      <span class="seg">人通过反复说同一种话，<span class="emp">活成了那种话所描述的样子。</span></span>
+      <span class="seg">用结构化语言代替模糊叙事。你说什么，你就成为什么。</span>
+      <span class="seg">把所有问题拆解到最小单元，<span class="emp">每一个最小单元都不难。</span></span>
+    </div>
+    <div class="ch-breather">· · ·</div>
+  </div>
+
+  <!-- 第五章 -->
+  <div class="chapter" id="ch5">
+    <div class="ch-head">
+      <div class="ch-num">第五章</div>
+      <div class="ch-title">身体是核心生产力</div>
+    </div>
+    <div class="ch-poem">
+      <span class="poem-line">天花板，</span>
+      <span class="poem-line">不在心理。</span>
+      <span class="poem-line">在<span class="emp">身体</span>。</span>
+    </div>
+    <div class="ch-body">
+      <span class="seg">意志力的上限很大程度上取决于<span class="emp">生理状态</span>。天花板不在心理，在身体。</span>
+      <span class="seg">一个完成了的 60 分，永远比一个停留在想法阶段的 100 分<span class="emp">更有价值。</span></span>
+    </div>
+    <div class="ch-breather">· · ·</div>
+  </div>
+
+  <!-- 第六章 -->
+  <div class="chapter" id="ch6">
+    <div class="ch-head">
+      <div class="ch-num">第六章</div>
+      <div class="ch-title">表达是影响世界的唯一接口</div>
+    </div>
+    <div class="ch-poem">
+      <span class="poem-line">你的认知，</span>
+      <span class="poem-line">是一艘<span class="emp">船</span>。</span>
+      <span class="poem-line">载别人去你到过的地方。</span>
+    </div>
+    <div class="ch-body">
+      <span class="seg">把认知资产变成<span class="emp">一艘船</span>——帮助别人更快地到达你已经到过的地方。</span>
+    </div>
+    <div class="ch-breather">· · ·</div>
   </div>
 
 </section>
 
 <!-- 结语 -->
-<div class="outro">
+<div class="outro" id="outro">
   <div class="outro-line">世界很简单。</div>
   <div class="outro-line">复杂的是你脑子里那些被过度演绎的声音。</div>
-  <br>
-  <div class="outro-line">但现在你知道了——</div>
-  <div class="outro-line">那些声音<span class="outro-emp">不是你</span>。</div>
+  <div class="outro-line" style="margin-top:1rem;">但现在你知道了——</div>
+  <div class="outro-line"><span class="outro-emp">那些声音不是你。</span></div>
   <div class="outro-line">你比它们<span class="outro-emp">大得多</span>。</div>
   <div class="outro-sign">— 《如实所现》· 树林</div>
 </div>
 
-<script>
-(function(){
-  // 滚动触发章节显示
-  var observer = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting) e.target.classList.add('visible');
-    });
-  }, { threshold: 0.2 });
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  document.querySelectorAll('.chapter, .outro').forEach(function(el){
-    observer.observe(el);
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ===== 进度条 =====
+var progressBar = document.getElementById('progressBar');
+document.addEventListener('scroll', function(){
+  var scrollTop = window.scrollY;
+  var docHeight = document.body.scrollHeight - window.innerHeight;
+  var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = Math.min(pct, 100) + '%';
+});
+
+// ===== HERO 入场 =====
+gsap.fromTo('.hero-l1', { opacity:0, y:12 }, { opacity:1, y:0, duration:1, delay:0.3 });
+gsap.fromTo('.hero-l2', { opacity:0, y:12 }, { opacity:1, y:0, duration:1.2, delay:1.2 });
+gsap.fromTo('.hero-l3', { opacity:0, y:12 }, { opacity:1, y:0, duration:1.2, delay:2 });
+gsap.fromTo('.hero-title-wrap', { opacity:0, y:10 }, { opacity:1, y:0, duration:1, delay:2.8 });
+gsap.fromTo('.hero-author', { opacity:0, y:10 }, { opacity:1, y:0, duration:1, delay:3.2 });
+
+// ===== 每章的动画 =====
+document.querySelectorAll('.chapter').forEach(function(ch){
+  // 标题区
+  ScrollTrigger.create({
+    trigger: ch.querySelector('.ch-head'),
+    start: 'top 80%',
+    onEnter: function(){
+      gsap.fromTo(ch.querySelector('.ch-head'), { opacity:0, y:16 }, { opacity:1, y:0, duration:0.8 });
+    },
+    once: true
   });
-})();
+
+  // 碎片化引言逐行
+  var poemLines = ch.querySelectorAll('.poem-line');
+  if(poemLines.length){
+    ScrollTrigger.create({
+      trigger: ch.querySelector('.ch-poem'),
+      start: 'top 75%',
+      onEnter: function(){
+        gsap.to(poemLines, {
+          opacity: 1, y: 0, duration: 0.6,
+          stagger: 0.25,
+          ease: 'power2.out'
+        });
+      },
+      once: true
+    });
+  }
+
+  // 正文段落逐段
+  var segs = ch.querySelectorAll('.seg');
+  if(segs.length){
+    ScrollTrigger.create({
+      trigger: segs[0],
+      start: 'top 78%',
+      onEnter: function(){
+        gsap.to(segs, {
+          opacity: 1, y: 0, duration: 0.7,
+          stagger: 0.35,
+          ease: 'power2.out'
+        });
+      },
+      once: true
+    });
+  }
+
+  // 引用块
+  var quote = ch.querySelector('.ch-quote');
+  if(quote){
+    ScrollTrigger.create({
+      trigger: quote,
+      start: 'top 82%',
+      onEnter: function(){
+        gsap.to(quote, { opacity:1, y:0, duration:0.9, ease:'power2.out' });
+      },
+      once: true
+    });
+  }
+
+  // 列表项
+  var items = ch.querySelectorAll('.ch-list li');
+  if(items.length){
+    ScrollTrigger.create({
+      trigger: items[0],
+      start: 'top 82%',
+      onEnter: function(){
+        gsap.to(items, {
+          opacity: 1, x: 0, duration: 0.5,
+          stagger: 0.12,
+          ease: 'power2.out'
+        });
+      },
+      once: true
+    });
+  }
+
+  // 视觉呼吸点
+  var breather = ch.querySelector('.ch-breather');
+  if(breather){
+    ScrollTrigger.create({
+      trigger: breather,
+      start: 'top 90%',
+      onEnter: function(){
+        gsap.to(breather, { opacity:0.3, duration:1.5 });
+      },
+      once: true
+    });
+  }
+});
+
+// ===== 结语 =====
+ScrollTrigger.create({
+  trigger: '#outro',
+  start: 'top 80%',
+  onEnter: function(){
+    gsap.to('#outro .outro-line', {
+      opacity: 1, y: 0, duration: 0.7,
+      stagger: 0.3,
+      ease: 'power2.out'
+    });
+    gsap.to('#outro .outro-sign', {
+      opacity: 1, y: 0, duration: 0.8,
+      delay: 1.8, ease: 'power2.out'
+    });
+  },
+  once: true
+});
+
+// ===== 微光粒子（章节间随机散落） =====
+document.querySelectorAll('.chapter').forEach(function(ch){
+  for(var i = 0; i < 4; i++){
+    var spark = document.createElement('div');
+    spark.className = 'spark';
+    spark.style.left = (10 + Math.random() * 80) + '%';
+    spark.style.top = (20 + Math.random() * 60) + '%';
+    ch.appendChild(spark);
+
+    ScrollTrigger.create({
+      trigger: spark,
+      start: 'top 90%',
+      onEnter: function(){
+        gsap.to(spark, {
+          opacity: function(){ return 0.15 + Math.random() * 0.25; },
+          duration: 2 + Math.random() * 3,
+          delay: Math.random() * 1.5,
+          ease: 'power2.out'
+        });
+      },
+      once: true
+    });
+  }
+});
 </script>
 
 </body>
