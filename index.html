@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>如实所现</title>
+<title>《如实所现》— 树林</title>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -29,11 +29,12 @@
     min-height: 100vh;
   }
 
-  /* ===== HERO ===== */
+  /* ===== HERO 背景层 ===== */
   .hero-bg {
     position: fixed;
     inset: 0;
     background: radial-gradient(ellipse at center 45%, rgba(15, 12, 8, 0) 30%, #060608 100%);
+    animation: bgLight 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0s forwards;
     z-index: 0;
   }
 
@@ -47,9 +48,11 @@
     background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.06) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
-    animation: breathe 8s ease-in-out infinite;
+    opacity: 0;
+    animation: breathe 8s ease-in-out 3s infinite, fadeInSlow 2s ease-out 3s forwards;
   }
 
+  /* ===== HERO 内容 ===== */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -66,34 +69,39 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.2rem;
-    opacity: 0;
-    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+    gap: 1rem;
   }
 
   .hero-line-1 {
     font-size: clamp(1.4rem, 4vw, 2rem);
     letter-spacing: 0.06em;
+    opacity: 0;
+    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s forwards;
   }
 
   .hero-line-2 {
     font-size: clamp(1.6rem, 4.5vw, 2.4rem);
     font-weight: 300;
     letter-spacing: 0.12em;
+    opacity: 0;
+    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 1.8s forwards;
   }
 
   .hero-line-3 {
     font-size: clamp(1.2rem, 3vw, 1.6rem);
-    opacity: 0.8;
+    opacity: 0;
+    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 3s forwards;
   }
 
   .hero-highlight { color: var(--gold); }
 
   .hero-title {
-    margin-top: 1.2rem;
+    margin-top: 1.5rem;
     font-size: 0.85rem;
     letter-spacing: 0.5em;
     color: var(--text-dim);
+    opacity: 0;
+    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 3.8s forwards;
   }
 
   .hero-title::before {
@@ -105,6 +113,15 @@
     margin: 0 auto 0.8rem auto;
   }
 
+  .hero-author {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    color: rgba(212, 207, 196, 0.25);
+    opacity: 0;
+    margin-top: 0.2rem;
+    animation: appear 1s cubic-bezier(0.22, 0.61, 0.36, 1) 4.2s forwards;
+  }
+
   .hero-scroll {
     position: absolute;
     bottom: 2rem;
@@ -112,26 +129,26 @@
     letter-spacing: 0.3em;
     color: rgba(212, 207, 196, 0.18);
     opacity: 0;
-    animation: appear 1.5s ease-out 1.5s forwards;
+    animation: appear 2s ease-out 5.5s forwards;
   }
 
   /* ===== 书本入口 ===== */
   .book-entry-wrap {
     position: relative;
     z-index: 2;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     opacity: 0;
-    animation: appear 1.2s ease-out 2s forwards;
+    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 6s forwards;
     cursor: pointer;
   }
 
   .book-mini {
-    width: 64px;
-    height: 88px;
+    width: 68px;
+    height: 94px;
     perspective: 600px;
   }
 
@@ -141,7 +158,7 @@
     position: relative;
     transform-style: preserve-3d;
     transform: rotateY(-12deg);
-    transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
   .book-entry-wrap:hover .book-mini-3d {
@@ -200,14 +217,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.5s ease, visibility 0s 0.5s;
-    overflow-y: auto;
-    padding: 2rem;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    padding: 1rem;
   }
 
   .book-overlay.open {
@@ -251,8 +267,7 @@
     perspective: 1400px;
     perspective-origin: center center;
     width: 100%;
-    max-width: 720px;
-    margin-top: 1rem;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -262,8 +277,9 @@
     position: relative;
     width: 100%;
     aspect-ratio: 3 / 4;
-    max-height: 78vh;
+    max-height: 80vh;
     transform-style: preserve-3d;
+    margin: 0 auto;
   }
 
   .page {
@@ -317,16 +333,26 @@
 
   .cover-title {
     font-size: clamp(22px, 4.5vw, 40px);
-    letter-spacing: 0.35em;
+    letter-spacing: 0.3em;
     color: var(--gold);
     -webkit-text-stroke: 0.5px rgba(201, 169, 110, 0.3);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     z-index: 1;
     position: relative;
   }
 
+  .cover-author {
+    font-size: clamp(11px, 2vw, 15px);
+    color: var(--cream);
+    opacity: 0.5;
+    letter-spacing: 0.2em;
+    z-index: 1;
+    position: relative;
+    margin-bottom: 8px;
+  }
+
   .cover-sub {
-    font-size: clamp(11px, 2vw, 16px);
+    font-size: clamp(11px, 2vw, 15px);
     color: var(--cream);
     opacity: 0.6;
     letter-spacing: 0.15em;
@@ -388,6 +414,7 @@
     color: var(--cocoa);
     margin-bottom: 14px;
     letter-spacing: 0.08em;
+    font-weight: 700;
   }
 
   .page-h3 {
@@ -431,14 +458,14 @@
 
   /* 控制栏 */
   .controls {
-    display: flex; align-items: center; gap: 16px; margin-top: 16px; padding-bottom: 1rem;
+    display: flex; align-items: center; gap: 16px; margin-top: 1.5rem;
   }
 
   .btn {
     background: transparent;
     border: 1px solid rgba(201, 169, 110, 0.4);
     color: var(--cream);
-    padding: 6px 16px;
+    padding: 6px 18px;
     border-radius: 3px;
     font-size: 13px;
     font-family: inherit;
@@ -458,20 +485,50 @@
     text-align: center;
   }
 
+  /* 翻书环境光 */
+  .book-ambient {
+    position: fixed;
+    bottom: -10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    height: 30vh;
+    background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 101;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .book-overlay.open .book-ambient {
+    opacity: 1;
+  }
+
   @keyframes appear {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  @keyframes bgLight {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   @keyframes breathe {
     0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
-    50% { opacity: 1; transform: translateX(-50%) scale(1.06); }
+    50%      { opacity: 1; transform: translateX(-50%) scale(1.06); }
+  }
+
+  @keyframes fadeInSlow {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   @media (max-width: 600px) {
-    .book { max-height: 65vh; aspect-ratio: 3 / 4.5; }
+    .book { max-height: 68vh; aspect-ratio: 3 / 4.5; }
     .page-front, .page-back { padding: 5% 7%; }
-    .controls { gap: 10px; margin-top: 10px; }
+    .controls { gap: 10px; margin-top: 12px; }
+    .btn { padding: 5px 14px; font-size: 12px; }
   }
 </style>
 </head>
@@ -486,7 +543,8 @@
     <div class="hero-line-1">世界比你以为的简单。</div>
     <div class="hero-line-2">复杂的，</div>
     <div class="hero-line-3">是你脑子里那些<span class="hero-highlight">被过度演绎</span>的东西。</div>
-    <div class="hero-title">如实所现</div>
+    <div class="hero-title">《如实所现》</div>
+    <div class="hero-author">树林</div>
 
     <div class="book-entry-wrap" id="bookEntry">
       <div class="book-mini">
@@ -504,6 +562,8 @@
 
 <!-- 全屏翻书 -->
 <div class="book-overlay" id="bookOverlay">
+  <div class="book-ambient"></div>
+
   <div class="scene">
     <div class="book" id="book">
 
@@ -511,7 +571,8 @@
       <div class="page" data-idx="0" style="z-index:13">
         <div class="front cover-front">
           <div class="cover-line"></div>
-          <div class="cover-title">如实所现</div>
+          <div class="cover-title">《如实所现》</div>
+          <div class="cover-author">树林</div>
           <div class="cover-line"></div>
           <div class="cover-sub">所见即所得 · 所现即所是</div>
           <div class="fold-corner">
@@ -520,7 +581,7 @@
           <div class="cover-hint">← 点击右半侧翻开</div>
         </div>
         <div class="back cover-back">
-          <div class="page-h2">如实所现</div>
+          <div class="page-h2">《如实所现》</div>
           <div class="page-p">世界很简单。</div>
           <div class="page-p">复杂的，</div>
           <div class="page-p">是你脑子里那些<span class="page-emp">被过度演绎</span>的声音。</div>
@@ -553,7 +614,7 @@
           <div class="page-h2">叙事是精神鸦片</div>
           <div class="page-p">叙事让你瘫痪在巨大的「应该」和「不能」之间。</div>
           <div class="page-p">结构让你回到<span class="page-emp">具体的下一步。</span></div>
-          <div class="page-note">你的大脑每天承受的刺激，远远超过被设计来承受的水平。你的情绪和真实生活之间的联系断了。</div>
+          <div class="page-note">你的大脑每天承受的刺激，远远超过它被设计来承受的水平。你的情绪和真实生活之间的联系断了。</div>
           <div class="page-num">3</div>
         </div>
         <div class="back page-back">
