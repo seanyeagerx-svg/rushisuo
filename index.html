@@ -9,50 +9,41 @@
 
   :root {
     --bg: #0a0a0c;
-    --cocoa: #4d2622;
-    --cocoa-dark: #2a1512;
-    --cream: #f2ecd1;
-    --cream-dark: #e8dcc0;
-    --paper: #faf7ed;
     --text: #d4cfc4;
     --text-dim: rgba(212, 207, 196, 0.45);
     --gold: #c9a96e;
-    --shadow: rgba(0,0,0,0.4);
+    --gold-dim: rgba(201, 169, 110, 0.25);
+    --cocoa: #3a1c18;
+    --paper: #faf7ed;
   }
 
   body {
     background: var(--bg);
     color: var(--text);
     font-family: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', serif;
-    line-height: 1.8;
+    line-height: 1.85;
     overflow-x: hidden;
-    min-height: 100vh;
   }
 
-  /* ===== HERO 背景层 ===== */
-  .hero-bg {
-    position: fixed;
-    inset: 0;
+  /* ===== 环境层 ===== */
+  .ambient-bg {
+    position: fixed; inset: 0;
     background: radial-gradient(ellipse at center 45%, rgba(15, 12, 8, 0) 30%, #060608 100%);
-    animation: bgLight 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0s forwards;
+    animation: bgFadeIn 2.4s cubic-bezier(0.22,0.61,0.36,1) 0s forwards;
     z-index: 0;
   }
 
-  .hero-ambient {
+  .ambient-glow {
     position: fixed;
-    bottom: -15vh;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 55vw;
-    height: 35vh;
-    background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.06) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+    bottom: -15vh; left: 50%; transform: translateX(-50%);
+    width: 55vw; height: 35vh;
+    background: radial-gradient(ellipse at center, rgba(201,169,110,0.06) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
     opacity: 0;
-    animation: breathe 8s ease-in-out 3s infinite, fadeInSlow 2s ease-out 3s forwards;
+    animation: fadeInSlow 2s ease-out 3s forwards, breathe 8s ease-in-out 5s infinite;
   }
 
-  /* ===== HERO 内容 ===== */
+  /* ===== HERO ===== */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -61,65 +52,51 @@
     justify-content: center;
     padding: 2rem;
     position: relative;
+    z-index: 1;
   }
 
   .hero-content {
-    position: relative;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.9rem;
+    opacity: 0;
+    animation: appear 1.2s cubic-bezier(0.22,0.61,0.36,1) 0.3s forwards;
   }
 
-  .hero-line-1 {
+  .hero-l1 {
     font-size: clamp(1.4rem, 4vw, 2rem);
     letter-spacing: 0.06em;
-    opacity: 0;
-    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s forwards;
   }
-
-  .hero-line-2 {
+  .hero-l2 {
     font-size: clamp(1.6rem, 4.5vw, 2.4rem);
     font-weight: 300;
     letter-spacing: 0.12em;
-    opacity: 0;
-    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 1.8s forwards;
   }
-
-  .hero-line-3 {
+  .hero-l3 {
     font-size: clamp(1.2rem, 3vw, 1.6rem);
-    opacity: 0;
-    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 3s forwards;
+    opacity: 0.8;
   }
-
-  .hero-highlight { color: var(--gold); }
+  .hero-hl { color: var(--gold); }
 
   .hero-title {
     margin-top: 1.5rem;
     font-size: 0.85rem;
     letter-spacing: 0.5em;
     color: var(--text-dim);
-    opacity: 0;
-    animation: appear 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 3.8s forwards;
   }
-
   .hero-title::before {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 1px;
-    background: rgba(201, 169, 110, 0.35);
+    content: ''; display: block;
+    width: 24px; height: 1px;
+    background: rgba(201,169,110,0.35);
     margin: 0 auto 0.8rem auto;
   }
 
   .hero-author {
     font-size: 0.7rem;
     letter-spacing: 0.35em;
-    color: rgba(212, 207, 196, 0.25);
-    opacity: 0;
-    margin-top: 0.2rem;
-    animation: appear 1s cubic-bezier(0.22, 0.61, 0.36, 1) 4.2s forwards;
+    color: rgba(212,207,196,0.25);
+    margin-top: 0.1rem;
   }
 
   .hero-scroll {
@@ -127,706 +104,275 @@
     bottom: 2rem;
     font-size: 0.65rem;
     letter-spacing: 0.3em;
-    color: rgba(212, 207, 196, 0.18);
-    opacity: 0;
-    animation: appear 2s ease-out 5.5s forwards;
+    color: rgba(212,207,196,0.18);
   }
 
-  /* ===== 书本入口 ===== */
-  .book-entry-wrap {
+  /* ===== 章节区 ===== */
+  .chapters {
     position: relative;
-    z-index: 2;
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+
+  .chapter {
+    padding: 4rem 0;
+    border-bottom: 1px solid rgba(201,169,110,0.06);
     opacity: 0;
-    animation: appear 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 6s forwards;
-    cursor: pointer;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.22,0.61,0.36,1), transform 0.8s cubic-bezier(0.22,0.61,0.36,1);
   }
 
-  .book-mini {
-    width: 68px;
-    height: 94px;
-    perspective: 600px;
+  .chapter.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .book-mini-3d {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transform: rotateY(-12deg);
-    transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
-  }
-
-  .book-entry-wrap:hover .book-mini-3d {
-    transform: rotateY(-4deg);
-  }
-
-  .book-mini-front {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #3a1c18, #4d2622);
-    border: 1px solid rgba(201, 169, 110, 0.25);
-    border-radius: 2px 6px 6px 2px;
-    writing-mode: vertical-rl;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.55rem;
+  .ch-num {
+    font-size: 0.7rem;
     letter-spacing: 0.35em;
     color: var(--gold);
-    box-shadow: 2px 3px 12px rgba(0,0,0,0.5);
-  }
-
-  .book-mini-spine {
-    position: absolute;
-    top: 0; left: 0;
-    width: 5px; height: 100%;
-    background: rgba(201, 169, 110, 0.3);
-    border-radius: 2px 0 0 2px;
-  }
-
-  .book-mini-pages {
-    position: absolute;
-    top: 1px; right: 1px; bottom: 1px;
-    width: 3px;
-    background: repeating-linear-gradient(to bottom,
-      rgba(212,207,196,0.12) 0px,
-      rgba(212,207,196,0.12) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-    border-radius: 0 4px 4px 0;
-  }
-
-  .book-hint {
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    color: rgba(201, 169, 110, 0.4);
-  }
-
-  /* ===== 全屏翻书 ===== */
-  .book-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(5, 5, 7, 0.96);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.5s ease, visibility 0s 0.5s;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    padding: 1rem;
-  }
-
-  .book-overlay.open {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.5s ease, visibility 0s 0s;
-  }
-
-  .book-close {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 110;
-    width: 36px; height: 36px;
-    border: 1px solid rgba(201, 169, 110, 0.2);
-    background: transparent;
-    color: var(--gold);
-    font-size: 1.1rem;
-    cursor: pointer;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.3s ease, visibility 0s 0.3s;
-  }
-
-  .book-close.visible {
-    visibility: visible;
-    opacity: 1;
-    transition: all 0.3s ease, visibility 0s 0s;
-  }
-
-  .book-close:hover {
-    background: rgba(201, 169, 110, 0.1);
-  }
-
-  /* ===== 翻书容器 ===== */
-  .scene {
-    perspective: 1400px;
-    perspective-origin: center center;
-    width: 100%;
-    max-width: 700px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .book {
-    position: relative;
-    width: 92%;
-    aspect-ratio: 3 / 4;
-    max-height: 80vh;
-    transform-style: preserve-3d;
-    margin: 0 auto 0 8%;
-    will-change: transform;
-  }
-
-  .page {
-    position: absolute;
-    inset: 0;
-    transform-style: preserve-3d;
-    transform-origin: left center;
-    transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
-    cursor: pointer;
-    will-change: transform;
-  }
-
-  /* 初始化每页 z 偏移（JS 在翻页时组合 translateZ + rotateY） */
-  .page[data-idx="0"] { transform: translateZ(6px); }
-  .page[data-idx="1"] { transform: translateZ(5px); }
-  .page[data-idx="2"] { transform: translateZ(4px); }
-  .page[data-idx="3"] { transform: translateZ(3px); }
-  .page[data-idx="4"] { transform: translateZ(2px); }
-  .page[data-idx="5"] { transform: translateZ(1px); }
-  .page[data-idx="6"] { transform: translateZ(0px); }
-
-  .page.flipped {
-    pointer-events: none;
-  }
-
-  .front, .back {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 2px 8px 8px 2px;
-    overflow: hidden;
-    transform: translateZ(0);
-  }
-
-  .back { transform: rotateY(180deg); }
-
-  /* 封面 */
-  .cover-front {
-    background: linear-gradient(135deg, #2a1512 0%, #4d2622 45%, #5c3028 100%);
-    border: 1px solid #6b3a30;
-    box-shadow: 3px 3px 12px var(--shadow), 1px 1px 2px rgba(0,0,0,0.2) inset;
-    color: var(--cream);
-    text-align: center;
-    padding: 8%;
-  }
-
-  .cover-front::before {
-    content: '';
-    position: absolute;
-    inset: 14px;
-    border: 1px solid rgba(201, 169, 110, 0.25);
-    border-radius: 2px 6px 6px 2px;
-  }
-
-  .cover-line { width: 32px; height: 1px; background: var(--gold); opacity: 0.5; margin: 8px auto; }
-
-  .cover-title {
-    font-size: clamp(22px, 4.5vw, 40px);
-    letter-spacing: 0.3em;
-    color: var(--gold);
-    -webkit-text-stroke: 0.5px rgba(201, 169, 110, 0.3);
-    margin-bottom: 10px;
-    z-index: 1;
-    position: relative;
-  }
-
-  .cover-author {
-    font-size: clamp(11px, 2vw, 15px);
-    color: var(--cream);
-    opacity: 0.5;
-    letter-spacing: 0.2em;
-    z-index: 1;
-    position: relative;
-    margin-bottom: 8px;
-  }
-
-  .cover-sub {
-    font-size: clamp(11px, 2vw, 15px);
-    color: var(--cream);
     opacity: 0.6;
-    letter-spacing: 0.15em;
-    z-index: 1;
-    position: relative;
+    margin-bottom: 0.8rem;
+    font-family: 'Noto Sans SC', sans-serif;
   }
 
-  .cover-hint {
-    position: absolute;
-    bottom: 10%;
-    font-size: 11px;
-    color: rgba(242, 236, 209, 0.35);
+  .ch-title {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--gold);
     letter-spacing: 0.12em;
+    margin-bottom: 1.5rem;
   }
 
-  .cover-back {
-    background: var(--paper);
-    color: var(--cocoa);
-    padding: 8%;
-    box-shadow: 2px 0 6px rgba(0,0,0,0.1);
-    justify-content: flex-start;
-    text-align: left;
+  .ch-body {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    line-height: 2.2;
+    letter-spacing: 0.04em;
+    color: var(--text);
   }
 
-  /* 内页 */
-  .page-front, .page-back {
-    background: var(--paper);
-    color: #2c1810;
-    padding: 7% 9%;
-    justify-content: flex-start;
-    text-align: left;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    border-left: 1px solid rgba(0,0,0,0.05);
+  .ch-body .emp {
+    color: var(--gold);
+    font-weight: 500;
   }
 
-  .page-back { background: linear-gradient(to right, var(--paper) 0%, #f5f0e0 100%); }
-
-  .page-pill {
-    display: inline-block;
-    border: 1px solid var(--gold);
-    color: var(--cocoa);
-    padding: 2px 10px;
-    border-radius: 16px;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    margin-bottom: 12px;
+  .ch-body .dim {
+    color: var(--text-dim);
+    font-size: 0.85em;
   }
 
-  .page-num {
-    position: absolute;
-    bottom: 6%;
-    right: 8%;
-    font-size: 11px;
-    color: #b8a88a;
+  .ch-quote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.2rem;
+    background: rgba(201,169,110,0.04);
+    border-left: 2px solid rgba(201,169,110,0.2);
+    border-radius: 0 4px 4px 0;
+    font-size: 0.9rem;
+    color: rgba(212,207,196,0.7);
+    line-height: 1.9;
   }
 
-  .page-h2 {
-    font-size: clamp(16px, 3vw, 22px);
-    color: var(--cocoa);
-    margin-bottom: 14px;
-    letter-spacing: 0.08em;
-    font-weight: 700;
+  .ch-list {
+    list-style: none;
+    padding-left: 0.5rem;
   }
-
-  .page-h3 {
-    font-size: clamp(13px, 2.5vw, 17px);
-    color: #6b4a3a;
-    margin-bottom: 10px;
-    font-weight: 400;
+  .ch-list li {
+    padding: 0.3rem 0;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
   }
-
-  .page-p {
-    font-size: clamp(12px, 2.2vw, 15px);
-    line-height: 2;
-    color: #3a2418;
-    margin-bottom: 8px;
-  }
-
-  .page-emp { color: var(--cocoa-dark); font-weight: 700; }
-
-  .page-note {
-    color: #8a7060;
-    font-size: 12px;
-    line-height: 1.8;
-    margin-top: 8px;
-    padding: 8px;
-    background: rgba(201, 169, 110, 0.08);
-    border-radius: 4px;
-  }
-
-  /* 折角 */
-  .fold-corner {
-    position: absolute;
-    bottom: 0; right: 0;
-    width: 32px; height: 32px;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    z-index: 2;
-  }
-
-  .fold-corner svg { width: 100%; height: 100%; }
-
-  .page:hover .fold-corner { width: 40px; height: 40px; }
-
-  /* 控制栏 */
-  .controls {
-    display: flex; align-items: center; gap: 16px; margin-top: 1.5rem;
-  }
-
-  .btn {
-    background: transparent;
-    border: 1px solid rgba(201, 169, 110, 0.4);
-    color: var(--cream);
-    padding: 6px 18px;
-    border-radius: 3px;
-    font-size: 13px;
-    font-family: inherit;
-    cursor: pointer;
-    letter-spacing: 0.08em;
-    transition: all 0.3s;
-  }
-
-  .btn:hover { background: rgba(201, 169, 110, 0.1); }
-  .btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
-
-  .page-indicator {
-    color: var(--cream);
-    font-size: 12px;
+  .ch-list li::before {
+    content: attr(data-n);
+    color: var(--gold);
+    margin-right: 0.6rem;
+    font-size: 0.8rem;
     opacity: 0.5;
-    min-width: 50px;
+  }
+
+  /* ===== 章节分隔 ===== */
+  .section-divider {
     text-align: center;
+    padding: 2rem 0;
+    color: var(--text-dim);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    opacity: 0.4;
   }
 
-  /* 翻书环境光 */
-  .book-ambient {
-    position: fixed;
-    bottom: -10vh;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60vw;
-    height: 30vh;
-    background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 101;
+  /* ===== 底部结语 ===== */
+  .outro {
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
     opacity: 0;
-    transition: opacity 0.8s ease;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.22,0.61,0.36,1);
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
   }
-
-  .book-overlay.open .book-ambient {
+  .outro.visible {
     opacity: 1;
+    transform: translateY(0);
+  }
+  .outro-line {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--text);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+  }
+  .outro-emp {
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .outro-sign {
+    margin-top: 2rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    color: var(--text-dim);
   }
 
   @keyframes appear {
     from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
     to   { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
-
-  @keyframes bgLight {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  @keyframes bgFadeIn {
+    from { opacity: 0; } to { opacity: 1; }
   }
-
-  @keyframes breathe {
-    0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
-    50%      { opacity: 1; transform: translateX(-50%) scale(1.06); }
-  }
-
   @keyframes fadeInSlow {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes breathe {
+    0%,100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+    50%     { opacity: 1; transform: translateX(-50%) scale(1.06); }
   }
 
   @media (max-width: 600px) {
-    .book { max-height: 68vh; aspect-ratio: 3 / 4.5; }
-    .page-front, .page-back { padding: 5% 7%; }
-    .controls { gap: 10px; margin-top: 12px; }
-    .btn { padding: 5px 14px; font-size: 12px; }
+    .chapters { padding: 0 1rem 4rem; }
+    .chapter { padding: 3rem 0; }
+    .ch-body { line-height: 2; }
   }
 </style>
 </head>
 <body>
 
-<div class="hero-bg"></div>
-<div class="hero-ambient"></div>
+<div class="ambient-bg"></div>
+<div class="ambient-glow"></div>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-line-1">世界比你以为的简单。</div>
-    <div class="hero-line-2">复杂的，</div>
-    <div class="hero-line-3">是你脑子里那些<span class="hero-highlight">被过度演绎</span>的东西。</div>
+    <div class="hero-l1">世界比你以为的简单。</div>
+    <div class="hero-l2">复杂的，</div>
+    <div class="hero-l3">是你脑子里那些<span class="hero-hl">被过度演绎</span>的东西。</div>
     <div class="hero-title">《如实所现》</div>
     <div class="hero-author">树林</div>
-
-    <div class="book-entry-wrap" id="bookEntry">
-      <div class="book-mini">
-        <div class="book-mini-3d">
-          <div class="book-mini-spine"></div>
-          <div class="book-mini-front">如实所现</div>
-          <div class="book-mini-pages"></div>
-        </div>
-      </div>
-      <span class="book-hint">翻开阅读</span>
-    </div>
   </div>
-  <div class="hero-scroll">↓</div>
+  <div class="hero-scroll">↓ 下滑阅读</div>
 </section>
 
-<!-- 全屏翻书 -->
-<div class="book-overlay" id="bookOverlay">
-  <div class="book-ambient"></div>
+<!-- 章节 -->
+<section class="chapters">
 
-  <div class="scene">
-    <div class="book" id="book">
-
-      <!-- 封面 -->
-      <div class="page" data-idx="0" style="z-index:13">
-        <div class="front cover-front">
-          <div class="cover-line"></div>
-          <div class="cover-title">《如实所现》</div>
-          <div class="cover-author">树林</div>
-          <div class="cover-line"></div>
-          <div class="cover-sub">所见即所得 · 所现即所是</div>
-          <div class="fold-corner">
-            <svg viewBox="0 0 40 40"><path d="M0 40 L0 8 Q0 0 8 0 L40 0" fill="#f2ecd1" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/><path d="M0 40 L0 8 Q0 0 8 0" fill="rgba(0,0,0,0.04)"/></svg>
-          </div>
-          <div class="cover-hint">← 点击右半侧翻开</div>
-        </div>
-        <div class="back cover-back">
-          <div class="page-h2">《如实所现》</div>
-          <div class="page-p">世界很简单。</div>
-          <div class="page-p">复杂的，</div>
-          <div class="page-p">是你脑子里那些<span class="page-emp">被过度演绎</span>的声音。</div>
-          <div class="page-num">0</div>
-        </div>
-      </div>
-
-      <!-- 页1: 你脑子里那个声音不是你 -->
-      <div class="page" data-idx="1" style="z-index:12">
-        <div class="front page-front">
-          <span class="page-pill">第一章</span>
-          <div class="page-h2">你脑子里那个声音不是你</div>
-          <div class="page-p">在念头出现的瞬间，识别这是一个<span class="page-emp">念头而不是事实</span>，那个念头就失去了力量。</div>
-          <div class="page-p">它变成了一团飘过的云。你不需要爬上去，也不需要追着它跑。</div>
-          <div class="page-note">你的大脑非常听话，听话到危险的程度。问题在于，你听话的对象错了。</div>
-          <div class="page-num">1</div>
-        </div>
-        <div class="back page-back">
-          <div class="page-h3">关键练习</div>
-          <div class="page-p">每当焦虑或恐惧袭来，先问自己：</div>
-          <div class="page-note">「这件事的实际影响有多大？用数字和时间说，不用形容词说。」</div>
-          <div class="page-num">2</div>
-        </div>
-      </div>
-
-      <!-- 页2: 叙事 -->
-      <div class="page" data-idx="2" style="z-index:11">
-        <div class="front page-front">
-          <span class="page-pill">第二章</span>
-          <div class="page-h2">叙事是精神鸦片</div>
-          <div class="page-p">叙事让你瘫痪在巨大的「应该」和「不能」之间。</div>
-          <div class="page-p">结构让你回到<span class="page-emp">具体的下一步。</span></div>
-          <div class="page-note">你的大脑每天承受的刺激，远远超过它被设计来承受的水平。你的情绪和真实生活之间的联系断了。</div>
-          <div class="page-num">3</div>
-        </div>
-        <div class="back page-back">
-          <div class="page-h3">结构化拆解</div>
-          <div class="page-p">❶ 定义问题（带数字带时间）</div>
-          <div class="page-p">❷ 列出条件</div>
-          <div class="page-p">❸ 评估瓶颈</div>
-          <div class="page-p">❹ 拆解到最小动作</div>
-          <div class="page-p">❺ 立刻做</div>
-          <div class="page-num">4</div>
-        </div>
-      </div>
-
-      <!-- 页3: 注意力 -->
-      <div class="page" data-idx="3" style="z-index:10">
-        <div class="front page-front">
-          <span class="page-pill">第三章</span>
-          <div class="page-h2">悄悄塑造你的力量</div>
-          <div class="page-p">注意力是你这一生<span class="page-emp">最重要的资源</span>。</div>
-          <div class="page-p">掌控它，就掌控了情绪、产出、方向、人生。</div>
-          <div class="page-note">注意力在哪，情绪就在哪。集中在同一方向才有复利。</div>
-          <div class="page-num">5</div>
-        </div>
-        <div class="back page-back">
-          <div class="page-h3">内在记分牌</div>
-          <div class="page-p">外部数据有噪音。</div>
-          <div class="page-p">内在成长是真指标。</div>
-          <div class="page-note">不要用别人的尺子量自己的路。你自己的记分牌，只属于你。</div>
-          <div class="page-num">6</div>
-        </div>
-      </div>
-
-      <!-- 页4: 语言 -->
-      <div class="page" data-idx="4" style="z-index:9">
-        <div class="front page-front">
-          <span class="page-pill">第四章</span>
-          <div class="page-h2">语言是你最重要的技术</div>
-          <div class="page-p">人通过反复说同一种话，<span class="page-emp">活成了那种话所描述的样子。</span></div>
-          <div class="page-p">用结构化语言代替模糊叙事。</div>
-          <div class="page-p">你说什么，你就成为什么。</div>
-          <div class="page-num">7</div>
-        </div>
-        <div class="back page-back">
-          <div class="page-h3">结构化这个世界</div>
-          <div class="page-p">把所有问题拆解到最小单元，<span class="page-emp">每一个最小单元都不难。</span></div>
-          <div class="page-note">困难从来不在最小单元里，困难在无力感里。拆开它，它就变小了。</div>
-          <div class="page-num">8</div>
-        </div>
-      </div>
-
-      <!-- 页5: 身体 -->
-      <div class="page" data-idx="5" style="z-index:8">
-        <div class="front page-front">
-          <span class="page-pill">第五章</span>
-          <div class="page-h2">身体是核心生产力</div>
-          <div class="page-p">意志力的上限很大程度上取决于<span class="page-emp">生理状态</span>。</div>
-          <div class="page-p">天花板不在心理，在身体。</div>
-          <div class="page-num">9</div>
-        </div>
-        <div class="back page-back">
-          <div class="page-h3">做事的逻辑</div>
-          <div class="page-p">一个完成了的 60 分，</div>
-          <div class="page-p">永远比一个停留在想法阶段的 100 分</div>
-          <div class="page-p"><span class="page-emp">更有价值。</span></div>
-          <div class="page-num">10</div>
-        </div>
-      </div>
-
-      <!-- 页6: 表达 + 后记 -->
-      <div class="page" data-idx="6" style="z-index:7">
-        <div class="front page-front">
-          <span class="page-pill">第六章</span>
-          <div class="page-h2">表达是影响世界的唯一接口</div>
-          <div class="page-p">把认知资产变成<span class="page-emp">一艘船</span>——</div>
-          <div class="page-p">帮助别人更快地到达你已经到过的地方。</div>
-          <div class="page-num">11</div>
-        </div>
-        <div class="back page-back">
-          <div class="page-h3">后记</div>
-          <div class="page-p">世界很简单。</div>
-          <div class="page-p">复杂的是你脑子里那些被过度演绎的声音。</div>
-          <div class="page-note">但现在你知道了——那些声音不是你。你比它们大得多。</div>
-          <div class="page-num">12</div>
-        </div>
-      </div>
-
+  <div class="chapter">
+    <div class="ch-num">第一章</div>
+    <div class="ch-title">你脑子里那个声音不是你</div>
+    <div class="ch-body">
+      在念头出现的瞬间，识别这是一个<span class="emp">念头而不是事实</span>，那个念头就失去了力量。它变成了一团飘过的云。你不需要爬上去，也不需要追着它跑。
     </div>
-
-    <div class="controls">
-      <button class="btn" id="btnPrev" disabled>← 上一页</button>
-      <span class="page-indicator" id="pageIndicator">封面</span>
-      <button class="btn" id="btnNext">下一页 →</button>
+    <div class="ch-quote">你的大脑非常听话，听话到危险的程度。问题在于，你听话的对象错了。</div>
+    <div class="ch-body">
+      每当焦虑或恐惧袭来，先问自己：这件事的实际影响有多大？<span class="dim">用数字和时间说，不用形容词说。</span>
     </div>
   </div>
+
+  <div class="chapter">
+    <div class="ch-num">第二章</div>
+    <div class="ch-title">叙事是精神鸦片</div>
+    <div class="ch-body">
+      叙事让你瘫痪在巨大的「应该」和「不能」之间。结构让你回到<span class="emp">具体的下一步。</span>
+    </div>
+    <div class="ch-quote">你的大脑每天承受的刺激，远远超过它被设计来承受的水平。你的情绪和真实生活之间的联系断了。</div>
+    <div class="ch-body">
+      <ul class="ch-list">
+        <li data-n="❶">定义问题<span class="dim"> — 带数字、带时间</span></li>
+        <li data-n="❷">列出条件</li>
+        <li data-n="❸">评估瓶颈</li>
+        <li data-n="❹">拆解到最小动作</li>
+        <li data-n="❺">立刻做</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <div class="ch-num">第三章</div>
+    <div class="ch-title">悄悄塑造你的力量</div>
+    <div class="ch-body">
+      注意力是你这一生<span class="emp">最重要的资源</span>。掌控它，就掌控了情绪、产出、方向、人生。
+    </div>
+    <div class="ch-quote">注意力在哪，情绪就在哪。集中在同一方向才有复利。</div>
+    <div class="ch-body">
+      <ul class="ch-list">
+        <li data-n="✦">外部数据有噪音，内在成长是真指标</li>
+        <li data-n="✦">不要用别人的尺子量自己的路</li>
+        <li data-n="✦">你自己的记分牌，只属于你</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <div class="ch-num">第四章</div>
+    <div class="ch-title">语言是你最重要的技术</div>
+    <div class="ch-body">
+      人通过反复说同一种话，<span class="emp">活成了那种话所描述的样子。</span>用结构化语言代替模糊叙事。你说什么，你就成为什么。
+    </div>
+    <div class="ch-quote">困难从来不在最小单元里，困难在无力感里。拆开它，它就变小了。</div>
+    <div class="ch-body">
+      把所有问题拆解到最小单元，<span class="emp">每一个最小单元都不难。</span>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <div class="ch-num">第五章</div>
+    <div class="ch-title">身体是核心生产力</div>
+    <div class="ch-body">
+      意志力的上限很大程度上取决于<span class="emp">生理状态</span>。天花板不在心理，在身体。一个完成了的 60 分，永远比一个停留在想法阶段的 100 分<span class="emp">更有价值。</span>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <div class="ch-num">第六章</div>
+    <div class="ch-title">表达是影响世界的唯一接口</div>
+    <div class="ch-body">
+      把认知资产变成<span class="emp">一艘船</span>——帮助别人更快地到达你已经到过的地方。
+    </div>
+  </div>
+
+</section>
+
+<!-- 结语 -->
+<div class="outro">
+  <div class="outro-line">世界很简单。</div>
+  <div class="outro-line">复杂的是你脑子里那些被过度演绎的声音。</div>
+  <br>
+  <div class="outro-line">但现在你知道了——</div>
+  <div class="outro-line">那些声音<span class="outro-emp">不是你</span>。</div>
+  <div class="outro-line">你比它们<span class="outro-emp">大得多</span>。</div>
+  <div class="outro-sign">— 《如实所现》· 树林</div>
 </div>
 
-<button class="book-close" id="bookClose">✕</button>
-
 <script>
-(function() {
-  var overlay = document.getElementById('bookOverlay');
-  var closeBtn = document.getElementById('bookClose');
-  var book = document.getElementById('book');
-  var btnPrev = document.getElementById('btnPrev');
-  var btnNext = document.getElementById('btnNext');
-  var indicator = document.getElementById('pageIndicator');
-  var pages = book.querySelectorAll('.page');
-  var totalPages = pages.length;
-  var currentPage = 0;
-
-  var pageNames = ['封面','第一章','第二章','第三章','第四章','第五章','第六章'];
-
-  function updateControls() {
-    btnPrev.disabled = currentPage === 0;
-    btnNext.disabled = currentPage >= totalPages;
-    indicator.textContent = currentPage === 0 ? '封面' : pageNames[currentPage] + ' (' + currentPage + '/' + totalPages + ')';
-  }
-
-  // 每页 translateZ 微偏移量（防抽搐）
-  var zOffsets = [6,5,4,3,2,1,0];
-
-  function setPageTransform(page, flipped) {
-    var idx = parseInt(page.getAttribute('data-idx'));
-    var z = zOffsets[idx] || 0;
-    if (flipped) {
-      page.style.transform = 'rotateY(-180deg) translateZ(' + z + 'px)';
-    } else {
-      page.style.transform = 'translateZ(' + z + 'px)';
-    }
-  }
-
-  function closeAll() {
-    pages.forEach(function(p) {
-      p.classList.remove('flipped');
-      setPageTransform(p, false);
+(function(){
+  // 滚动触发章节显示
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) e.target.classList.add('visible');
     });
-  }
+  }, { threshold: 0.2 });
 
-  function nextPage() {
-    if (currentPage < totalPages) {
-      pages[currentPage].classList.add('flipped');
-      setPageTransform(pages[currentPage], true);
-      currentPage++;
-    }
-    updateControls();
-  }
-
-  function prevPage() {
-    if (currentPage > 0) {
-      currentPage--;
-      pages[currentPage].classList.remove('flipped');
-      setPageTransform(pages[currentPage], false);
-    }
-    updateControls();
-  }
-
-  book.addEventListener('click', function(e) {
-    if (currentPage >= totalPages) return;
-    var rect = book.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    if (x < rect.width / 2) prevPage();
-    else nextPage();
+  document.querySelectorAll('.chapter, .outro').forEach(function(el){
+    observer.observe(el);
   });
-
-  btnPrev.addEventListener('click', function(e) { e.stopPropagation(); prevPage(); });
-  btnNext.addEventListener('click', function(e) { e.stopPropagation(); nextPage(); });
-
-  document.addEventListener('keydown', function(e) {
-    if (!overlay.classList.contains('open')) return;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); nextPage(); }
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevPage(); }
-    if (e.key === 'Escape') closeBook();
-  });
-
-  // Touch swipe
-  var touchX = 0;
-  book.addEventListener('touchstart', function(e) { touchX = e.touches[0].clientX; });
-  book.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 40) { if (dx < 0) nextPage(); else prevPage(); }
-  });
-
-  function openBook() {
-    overlay.classList.add('open');
-    closeBtn.classList.add('visible');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeBook() {
-    overlay.classList.remove('open');
-    closeBtn.classList.remove('visible');
-    document.body.style.overflow = '';
-    closeAll();
-    currentPage = 0;
-    updateControls();
-  }
-
-  document.getElementById('bookEntry').addEventListener('click', openBook);
-  closeBtn.addEventListener('click', closeBook);
-
-  updateControls();
 })();
 </script>
 
