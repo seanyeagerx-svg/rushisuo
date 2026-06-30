@@ -275,11 +275,12 @@
 
   .book {
     position: relative;
-    width: 100%;
+    width: 92%;
     aspect-ratio: 3 / 4;
     max-height: 80vh;
     transform-style: preserve-3d;
-    margin: 0 auto;
+    margin: 0 auto 0 8%;
+    will-change: transform;
   }
 
   .page {
@@ -289,10 +290,19 @@
     transform-origin: left center;
     transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
     cursor: pointer;
+    will-change: transform;
   }
 
+  /* 初始化每页 z 偏移（JS 在翻页时组合 translateZ + rotateY） */
+  .page[data-idx="0"] { transform: translateZ(6px); }
+  .page[data-idx="1"] { transform: translateZ(5px); }
+  .page[data-idx="2"] { transform: translateZ(4px); }
+  .page[data-idx="3"] { transform: translateZ(3px); }
+  .page[data-idx="4"] { transform: translateZ(2px); }
+  .page[data-idx="5"] { transform: translateZ(1px); }
+  .page[data-idx="6"] { transform: translateZ(0px); }
+
   .page.flipped {
-    transform: rotateY(-180deg);
     pointer-events: none;
   }
 
@@ -307,6 +317,7 @@
     align-items: center;
     border-radius: 2px 8px 8px 2px;
     overflow: hidden;
+    transform: translateZ(0);
   }
 
   .back { transform: rotateY(180deg); }
@@ -733,13 +744,30 @@
     indicator.textContent = currentPage === 0 ? '封面' : pageNames[currentPage] + ' (' + currentPage + '/' + totalPages + ')';
   }
 
+  // 每页 translateZ 微偏移量（防抽搐）
+  var zOffsets = [6,5,4,3,2,1,0];
+
+  function setPageTransform(page, flipped) {
+    var idx = parseInt(page.getAttribute('data-idx'));
+    var z = zOffsets[idx] || 0;
+    if (flipped) {
+      page.style.transform = 'rotateY(-180deg) translateZ(' + z + 'px)';
+    } else {
+      page.style.transform = 'translateZ(' + z + 'px)';
+    }
+  }
+
   function closeAll() {
-    pages.forEach(function(p) { p.classList.remove('flipped'); });
+    pages.forEach(function(p) {
+      p.classList.remove('flipped');
+      setPageTransform(p, false);
+    });
   }
 
   function nextPage() {
     if (currentPage < totalPages) {
       pages[currentPage].classList.add('flipped');
+      setPageTransform(pages[currentPage], true);
       currentPage++;
     }
     updateControls();
@@ -749,6 +777,7 @@
     if (currentPage > 0) {
       currentPage--;
       pages[currentPage].classList.remove('flipped');
+      setPageTransform(pages[currentPage], false);
     }
     updateControls();
   }
